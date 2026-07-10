@@ -1,12 +1,19 @@
 {
-  "name": "###NAME###",
-  "title": "###TITLE###",
-  "description": "###DESCRIPTION###",
+  "name": "FrozenFoodLib",
+  "title": "Frozen Food Library",
+  "description": "Small library to create Frozen Food dynamically.",
   "author": "QuingKhaos",
   "homepage": "",
   "version": "1.0.0",
   "factorio_version": "2.0",
   "dependencies": [
-    "base >= 2.0.0"
-  ]
+    "base >= 2.0.77",
+    "space-age >= 2.0.77",
+
+    "flib >= 0.16.5",
+    "khaoslib >= 1.6.0",
+
+    "FrozenFood >= 1.2.2"
+  ],
+  "spoiling_required": true
 }
