@@ -95,6 +95,7 @@ function FrozenFoodLib.create_frozen_food(def)
 			{icon = def.icon, icon_size = 64, scale = 0.25, shift = {0, -1}, tint = {1.0, 1.0, 1.0, 0.5}},
   } :commit()
 
+  local flouroketone_amount = def.unlock == "s6x-freeze-preservation-living" and 2 or 1
   khaoslib_recipe:load {
     type = "recipe",
     name = "s6x-frozen-" .. def.name,
@@ -105,11 +106,11 @@ function FrozenFoodLib.create_frozen_food(def)
 		ingredients = {
 			{type = "item", name = def.name, amount = FrozenFoodLib.settings.recipe_size, ignored_by_stats = FrozenFoodLib.settings.recipe_size},
 			{type = "item", name = "s6x-frozen-box", amount = FrozenFoodLib.settings.recipe_size, ignored_by_stats = FrozenFoodLib.settings.recipe_size},
-			{type = "fluid", name = "fluoroketone-cold", amount = 1, ignored_by_stats = 1},
+			{type = "fluid", name = "fluoroketone-cold", amount = flouroketone_amount, ignored_by_stats = flouroketone_amount},
 		},
 		results ={
 			{type = "item", name = "s6x-frozen-" .. def.name, amount = FrozenFoodLib.settings.recipe_size, ignored_by_stats = FrozenFoodLib.settings.recipe_size},
-			{type = "fluid", name = "fluoroketone-hot", amount = 1, ignored_by_stats = 1},
+			{type = "fluid", name = "fluoroketone-hot", amount = flouroketone_amount, ignored_by_stats = flouroketone_amount},
 		},
 
 		main_product = "s6x-frozen-" .. def.name,
