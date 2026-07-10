@@ -16,9 +16,12 @@ Best to look at the source of the other mods that use this library for examples.
 - [Frozen Food Tweaks][FrozenFoodTweaks] - Opinionated tweaks to Frozen Food.
 - [Frozen Food for Wooden Aquilo: Seabloom Algaculture][aquilo-seabloom-algaculture] - Adds frozen food support to
   Seabloom Algaculture.
+- [Frozen Food for Wooden Fulgora: Coralmium Agriculture][fulgora-coralmium-agriculture] - Adds frozen food support to
+  Coralmium Agriculture.
 - [Frozen Food for Lignumis][frozen-food-lignumis] - Adds frozen food support to Lignumis.
 
 [FrozenFoodLib]: https://mods.factorio.com/mod/FrozenFoodLib
 [FrozenFoodTweaks]: https://mods.factorio.com/mod/FrozenFoodTweaks
 [aquilo-seabloom-algaculture]: https://mods.factorio.com/mod/frozen-food-aquilo-seabloom-algaculture
+[fulgora-coralmium-agriculture]: https://mods.factorio.com/mod/frozen-food-fulgora-coralmium-agriculture
 [frozen-food-lignumis]: https://mods.factorio.com/mod/frozen-food-lignumis
