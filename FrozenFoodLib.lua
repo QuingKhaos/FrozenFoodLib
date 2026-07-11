@@ -1,6 +1,7 @@
 
 local item_sounds = require("__base__.prototypes.item_sounds")
 local khaoslib_item = require("__khaoslib__.prototypes.item")
+local khaoslib_list = require("__khaoslib__.common.list")
 local khaoslib_recipe = require("__khaoslib__.prototypes.recipe")
 local khaoslib_technology = require("__khaoslib__.prototypes.technology")
 
@@ -13,6 +14,7 @@ local FrozenFoodLib = {}
 --- @field public spoilage "default"|"extra"|"off"
 --- @field public recipe_size number
 --- @field public additional_categories data.RecipeCategoryID[]?
+--- @field public thaw_categories data.RecipeCategoryID[]
 --- @field public container_recipe "plastic"|"lds"
 --- @field public container_ingredient data.ItemID
 --- @field public biochamber_allow boolean
@@ -56,6 +58,9 @@ FrozenFoodLib.settings.additional_categories = nil
 if (FrozenFoodLib.settings.biochamber_allow) then
   FrozenFoodLib.settings.additional_categories = {"organic"}
 end
+
+FrozenFoodLib.thaw_categories = util.table.deepcopy(FrozenFoodLib.settings.additional_categories or {})
+khaoslib_list.add(FrozenFoodLib.thaw_categories, "advanced-crafting", "advanced-crafting", {index = 1})
 
 FrozenFoodLib.settings.max_productivity = nil
 if (not FrozenFoodLib.settings.biochamber_productivity) then
@@ -149,7 +154,7 @@ function FrozenFoodLib.create_frozen_food(def)
     {type = "item", name = def.name, amount = 1, ignored_by_stats = 1, probability = FrozenFoodLib.settings.freezer_efficiency},
     {type = "item", name = "s6x-frozen-box", amount = 1, ignored_by_stats = 1}
   } :set_crafting_machine_tint(def.tint)
-    :set_categories(util.merge({{"advanced-crafting"}, FrozenFoodLib.settings.additional_categories or {}}))
+    :set_categories(FrozenFoodLib.thaw_categories)
     :commit()
 
   khaoslib_technology:load(def.unlock or "s6x-freeze-preservation")

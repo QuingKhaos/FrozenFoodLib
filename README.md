@@ -20,10 +20,12 @@ Best to look at the source of the other mods that use this library for examples.
   Seabloom Algaculture.
 - [Frozen Food for Wooden Fulgora: Coralmium Agriculture][fulgora-coralmium-agriculture] - Adds frozen food support to
   Coralmium Agriculture.
-- [Frozen Food for Lignumis][frozen-food-lignumis] - Adds frozen food support to Lignumis.
+- [Frozen Food for Gleba Juice][gleba-juice] - Adds frozen food support for Gleba Juice.
+- [Frozen Food for Lignumis][lignumis] - Adds frozen food support to Lignumis.
 
 [FrozenFoodLib]: https://mods.factorio.com/mod/FrozenFoodLib
 [FrozenFoodTweaks]: https://mods.factorio.com/mod/FrozenFoodTweaks
 [aquilo-seabloom-algaculture]: https://mods.factorio.com/mod/frozen-food-aquilo-seabloom-algaculture
 [fulgora-coralmium-agriculture]: https://mods.factorio.com/mod/frozen-food-fulgora-coralmium-agriculture
-[frozen-food-lignumis]: https://mods.factorio.com/mod/frozen-food-lignumis
+[gleba-juice]: https://mods.factorio.com/mod/frozen-food-gleba-juice
+[lignumis]: https://mods.factorio.com/mod/frozen-food-lignumis
