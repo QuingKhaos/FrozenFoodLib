@@ -1,8 +1,8 @@
 
 local item_sounds = require("__base__.prototypes.item_sounds")
-local khaoslib_item = require("__khaoslib__.item")
-local khaoslib_recipe = require("__khaoslib__.recipe")
-local khaoslib_technology = require("__khaoslib__.technology")
+local khaoslib_item = require("__khaoslib__.prototypes.item")
+local khaoslib_recipe = require("__khaoslib__.prototypes.recipe")
+local khaoslib_technology = require("__khaoslib__.prototypes.technology")
 
 --- @class FrozenFoodLib
 local FrozenFoodLib = {}
@@ -99,69 +99,58 @@ function FrozenFoodLib.create_frozen_food(def)
   khaoslib_recipe:load {
     type = "recipe",
     name = "s6x-frozen-" .. def.name,
-    category = "cryogenics",
 		subgroup = "freeze-thaw-processes",
     order = "zzy-" .. def.order,
     energy_required = FrozenFoodLib.settings.freeze_time,
-		ingredients = {
-			{type = "item", name = def.name, amount = FrozenFoodLib.settings.recipe_size, ignored_by_stats = FrozenFoodLib.settings.recipe_size},
-			{type = "item", name = "s6x-frozen-box", amount = FrozenFoodLib.settings.recipe_size, ignored_by_stats = FrozenFoodLib.settings.recipe_size},
-			{type = "fluid", name = "fluoroketone-cold", amount = flouroketone_amount, ignored_by_stats = flouroketone_amount},
-		},
-		results ={
-			{type = "item", name = "s6x-frozen-" .. def.name, amount = FrozenFoodLib.settings.recipe_size, ignored_by_stats = FrozenFoodLib.settings.recipe_size},
-			{type = "fluid", name = "fluoroketone-hot", amount = flouroketone_amount, ignored_by_stats = flouroketone_amount},
-		},
-
 		main_product = "s6x-frozen-" .. def.name,
-
 		auto_recycle = false,
 		allow_productivity = false,
 		allow_quality = false,
 		allow_decomposition = false,
 		enabled = false,
-
-		crafting_machine_tint ={
-		  primary = {r = 0.56, g = 0.837, b = 0.837, a = 1.000},
-		  secondary = {r = 0.398, g = 0.732, b = 0.681, a = 1.000}, -- #65baadff
-		  tertiary = {r = 0.337, g = 0.306, b = 0.306, a = 1.000}, -- #554e4eff
-		  quaternary = {r = 0.436, g = 0.743, b = 0.711, a = 1.000}, -- #6fbdb5ff
-		},
   } :set_icons {
 			{icon = "__FrozenFood__/graphics/icons/frozen-box.png", icon_size = 64},
 			{icon = "__FrozenFood__/graphics/icons/auto/frozen-overlay.png", icon_size = 64, tint = {def.tint.primary.r, def.tint.primary.g, def.tint.primary.b, 0.25}},
 			{icon = def.icon, icon_size = 64, scale = 0.25, shift = {0, -1}, tint = {1.0, 1.0, 1.0, 0.5}},
-  } :commit()
+  } :set_ingredients {
+    {type = "item", name = def.name, amount = FrozenFoodLib.settings.recipe_size, ignored_by_stats = FrozenFoodLib.settings.recipe_size},
+    {type = "item", name = "s6x-frozen-box", amount = FrozenFoodLib.settings.recipe_size, ignored_by_stats = FrozenFoodLib.settings.recipe_size},
+    {type = "fluid", name = "fluoroketone-cold", amount = flouroketone_amount, ignored_by_stats = flouroketone_amount},
+  } :set_results {
+    {type = "item", name = "s6x-frozen-" .. def.name, amount = FrozenFoodLib.settings.recipe_size, ignored_by_stats = FrozenFoodLib.settings.recipe_size},
+    {type = "fluid", name = "fluoroketone-hot", amount = flouroketone_amount, ignored_by_stats = flouroketone_amount},
+  } :set_crafting_machine_tint {
+    primary = {r = 0.56, g = 0.837, b = 0.837, a = 1.000},
+    secondary = {r = 0.398, g = 0.732, b = 0.681, a = 1.000}, -- #65baadff
+    tertiary = {r = 0.337, g = 0.306, b = 0.306, a = 1.000}, -- #554e4eff
+    quaternary = {r = 0.436, g = 0.743, b = 0.711, a = 1.000}, -- #6fbdb5ff
+  } :set_categories {"cryogenics"}
+    :commit()
 
   khaoslib_recipe:load {
     type = "recipe",
     name = "s6x-thaw-" .. def.name,
-    category = "advanced-crafting",
-    additional_categories = FrozenFoodLib.settings.additional_categories,
     subgroup = "freeze-thaw-processes",
     order = "zzz-" .. def.order,
 		auto_recycle = false,
 		energy_required = 1,
     maximum_productivity = FrozenFoodLib.settings.max_productivity,
-		ingredients = {
-			{type = "item", name = "s6x-frozen-" .. def.name, amount = 1, ignored_by_stats = 1},
-		},
-		results = {
-			{type = "item", name = def.name, amount = 1, ignored_by_stats = 1, probability = FrozenFoodLib.settings.freezer_efficiency},
-			{type = "item", name = "s6x-frozen-box", amount = 1, ignored_by_stats = 1}
-		},
-
 		allow_productivity = false,
 		allow_quality = false,
 		allow_decomposition = false,
 		enabled = false,
-
-		crafting_machine_tint = def.tint,
   } :set_icons {
       {icon = def.icon, icon_size = 64},
 			{icon = "__FrozenFood__/graphics/icons/frozen-box.png", icon_size = 64, scale = 0.25, shift = {-8, -8}},
 			{icon = def.icon, icon_size = 64, scale = 0.125, shift = {-8, -8}, tint = {1.0, 1.0, 1.0, 0.5}},
-  } :commit()
+  } :set_ingredients {
+    {type = "item", name = "s6x-frozen-" .. def.name, amount = 1, ignored_by_stats = 1},
+  } :set_results {
+    {type = "item", name = def.name, amount = 1, ignored_by_stats = 1, probability = FrozenFoodLib.settings.freezer_efficiency},
+    {type = "item", name = "s6x-frozen-box", amount = 1, ignored_by_stats = 1}
+  } :set_crafting_machine_tint(def.tint)
+    :set_categories(util.merge({{"advanced-crafting"}, FrozenFoodLib.settings.additional_categories or {}}))
+    :commit()
 
   khaoslib_technology:load(def.unlock or "s6x-freeze-preservation")
     :add_unlock_recipe("s6x-frozen-" .. def.name)
