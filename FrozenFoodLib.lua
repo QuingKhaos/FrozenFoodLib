@@ -8,11 +8,9 @@ local khaoslib_technology = require("__khaoslib__.prototypes.technology")
 --- @class FrozenFoodLib
 local FrozenFoodLib = {}
 
---- @diagnostic disable: assign-type-mismatch
-
 --- @class FrozenFoodLib.Settings
 --- @field public spoilage "default"|"extra"|"off"
---- @field public recipe_size number
+--- @field public recipe_size integer
 --- @field public additional_categories data.RecipeCategoryID[]?
 --- @field public thaw_categories data.RecipeCategoryID[]
 --- @field public container_recipe "plastic"|"lds"
@@ -22,8 +20,8 @@ local FrozenFoodLib = {}
 --- @field public max_productivity number?
 --- @field public freeze_time number
 --- @field public freezer_efficiency number
---- @field public short_spoilage_time number?
---- @field public long_spoilage_time number?
+--- @field public short_spoilage_time integer?
+--- @field public long_spoilage_time integer?
 --- @field public spoilage_target data.ItemID?
 FrozenFoodLib.settings  = {
   spoilage = settings.startup["s6x-spoilage"].value,
@@ -38,11 +36,9 @@ FrozenFoodLib.settings  = {
   spoilage_target = "s6x-freezer-burn"
 }
 
---- @diagnostic enable: assign-type-mismatch
-
 if (FrozenFoodLib.settings.spoilage == "extra") then
-  FrozenFoodLib.settings.short_spoilage_time = FrozenFoodLib.settings.short_spoilage_time * 10
-  FrozenFoodLib.settings.long_spoilage_time = FrozenFoodLib.settings.long_spoilage_time * 10
+  FrozenFoodLib.settings.short_spoilage_time = FrozenFoodLib.settings.short_spoilage_time--[[@cast -?]] * 10
+  FrozenFoodLib.settings.long_spoilage_time = FrozenFoodLib.settings.long_spoilage_time--[[@cast -?]] * 10
 elseif (FrozenFoodLib.settings.spoilage == "off") then
   FrozenFoodLib.settings.short_spoilage_time = nil
   FrozenFoodLib.settings.long_spoilage_time = nil
@@ -87,7 +83,7 @@ function FrozenFoodLib.create_frozen_food(def)
     order = "zzx-" .. def.order,
     stack_size = def.stack_size,
     weight = def.weight * kg,
-    spoil_ticks = def.spoilage_time == "long" and FrozenFoodLib.settings.long_spoilage_time or FrozenFoodLib.settings.short_spoilage_time,
+    spoil_ticks = (def.spoilage_time == "long" and FrozenFoodLib.settings.long_spoilage_time or FrozenFoodLib.settings.short_spoilage_time) --[[@as integer?]],
     spoil_result = FrozenFoodLib.settings.spoilage_target,
 		default_import_location = def.default_import_location or "gleba",
 		inventory_move_sound = item_sounds.plastic_inventory_move,
@@ -96,6 +92,7 @@ function FrozenFoodLib.create_frozen_food(def)
 		random_tint_color = item_tints.plastic
   } :set_icons {
 			{icon = "__FrozenFood__/graphics/icons/frozen-box.png", icon_size = 64},
+      --- @diagnostic disable-next-line: need-check-nil
 			{icon = "__FrozenFood__/graphics/icons/auto/frozen-overlay.png", icon_size = 64, tint = {def.tint.primary.r, def.tint.primary.g, def.tint.primary.b, 0.25}},
 			{icon = def.icon, icon_size = 64, scale = 0.25, shift = {0, -1}, tint = {1.0, 1.0, 1.0, 0.5}},
   } :commit()
@@ -115,6 +112,7 @@ function FrozenFoodLib.create_frozen_food(def)
 		enabled = false,
   } :set_icons {
 			{icon = "__FrozenFood__/graphics/icons/frozen-box.png", icon_size = 64},
+      --- @diagnostic disable-next-line: need-check-nil
 			{icon = "__FrozenFood__/graphics/icons/auto/frozen-overlay.png", icon_size = 64, tint = {def.tint.primary.r, def.tint.primary.g, def.tint.primary.b, 0.25}},
 			{icon = def.icon, icon_size = 64, scale = 0.25, shift = {0, -1}, tint = {1.0, 1.0, 1.0, 0.5}},
   } :set_ingredients {
@@ -162,6 +160,5 @@ function FrozenFoodLib.create_frozen_food(def)
     :add_unlock_recipe("s6x-thaw-" .. def.name)
     :commit()
 end
-
 
 return FrozenFoodLib
