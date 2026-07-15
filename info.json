@@ -4,16 +4,19 @@
   "description": "Small library to create Frozen Food dynamically.",
   "author": "QuingKhaos",
   "homepage": "https://discord.gg/SYmkaDjFCt",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "factorio_version": "2.0",
   "dependencies": [
     "base >= 2.0.77",
     "space-age >= 2.0.77",
+    "(?) quality >= 2.0.77",
 
     "flib >= 0.16.5",
     "khaoslib >= 1.10.0",
 
-    "FrozenFood >= 1.2.2"
+    "FrozenFood >= 1.2.2",
+
+    "(?) Flare Stack >= 4.1.1"
   ],
   "spoiling_required": true
 }

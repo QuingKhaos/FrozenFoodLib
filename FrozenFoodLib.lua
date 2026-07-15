@@ -161,4 +161,28 @@ function FrozenFoodLib.create_frozen_food(def)
     :commit()
 end
 
+--- Removes a frozen food item and its freeze/thaw recipes from the game.
+--- @param name data.ItemID The name of the frozen item to remove.
+--- @param unlock data.TechnologyID? The technology to remove the freeze/thaw recipes from. Tries to remove it from "s6x-freeze-preservation" and "s6x-freeze-preservation-living" if not specified.
+function FrozenFoodLib.remove_frozen_food(name, unlock)
+  khaoslib_item.remove("s6x-frozen-" .. name)
+  khaoslib_recipe.remove("s6x-frozen-" .. name)
+  khaoslib_recipe.remove("s6x-thaw-" .. name)
+
+  if mods["quality"] and khaoslib_recipe.exists("s6x-frozen-" .. name .. "-recycling") then
+    khaoslib_recipe.remove("s6x-frozen-" .. name .. "-recycling")
+  end
+
+  if mods["Flare Stack"] and khaoslib_recipe.exists("item-s6x-frozen-" .. name .. "-incineration") then
+    khaoslib_recipe.remove("item-s6x-frozen-" .. name .. "-incineration")
+  end
+
+  if unlock then
+    khaoslib_technology:load(unlock):remove_unlock_recipe("s6x-frozen-" .. name):remove_unlock_recipe("s6x-thaw-" .. name):commit()
+  else
+    khaoslib_technology:load("s6x-freeze-preservation"):remove_unlock_recipe("s6x-frozen-" .. name):remove_unlock_recipe("s6x-thaw-" .. name):commit()
+    khaoslib_technology:load("s6x-freeze-preservation-living"):remove_unlock_recipe("s6x-frozen-" .. name):remove_unlock_recipe("s6x-thaw-" .. name):commit()
+  end
+end
+
 return FrozenFoodLib
