@@ -8,33 +8,39 @@ local khaoslib_technology = require("__khaoslib__.prototypes.technology")
 --- @class FrozenFoodLib
 local FrozenFoodLib = {}
 
---- @class FrozenFoodLib.Settings
---- @field public spoilage "default"|"extra"|"off"
---- @field public recipe_size integer
---- @field public additional_categories data.RecipeCategoryID[]?
---- @field public thaw_categories data.RecipeCategoryID[]
---- @field public container_recipe "plastic"|"lds"
---- @field public container_ingredient data.ItemID
---- @field public biochamber_allow boolean
---- @field public biochamber_productivity boolean
---- @field public max_productivity number?
---- @field public freeze_time number
---- @field public freezer_efficiency number
---- @field public short_spoilage_time integer?
---- @field public long_spoilage_time integer?
---- @field public spoilage_target data.ItemID?
-FrozenFoodLib.settings  = {
-  spoilage = settings.startup["s6x-spoilage"].value,
-  recipe_size = 2,
-  container_recipe = settings.startup["s6x-container-recipe"].value,
-  biochamber_allow = settings.startup["s6x-biochamber-allow"].value,
-  biochamber_productivity = settings.startup["s6x-biochamber-productivity"].value,
-  freeze_time = settings.startup["s6x-freeze-time"].value,
-  freezer_efficiency = settings.startup["s6x-freezer-efficiency"].value,
-  short_spoilage_time = 1440 * minute,
-  long_spoilage_time = 1440 * minute * 2,
-  spoilage_target = "s6x-freezer-burn"
-}
+do
+  --- @diagnostic disable: assign-type-mismatch
+
+  --- @class FrozenFoodLib.Settings
+  --- @field public spoilage "default"|"extra"|"off"
+  --- @field public recipe_size integer
+  --- @field public additional_categories data.RecipeCategoryID[]?
+  --- @field public thaw_categories data.RecipeCategoryID[]
+  --- @field public container_recipe "plastic"|"lds"
+  --- @field public container_ingredient data.ItemID
+  --- @field public biochamber_allow boolean
+  --- @field public biochamber_productivity boolean
+  --- @field public max_productivity number?
+  --- @field public freeze_time number
+  --- @field public freezer_efficiency number
+  --- @field public short_spoilage_time integer?
+  --- @field public long_spoilage_time integer?
+  --- @field public spoilage_target data.ItemID?
+  FrozenFoodLib.settings  = {
+    spoilage = settings.startup["s6x-spoilage"].value,
+    recipe_size = 2,
+    container_recipe = settings.startup["s6x-container-recipe"].value,
+    biochamber_allow = settings.startup["s6x-biochamber-allow"].value,
+    biochamber_productivity = settings.startup["s6x-biochamber-productivity"].value,
+    freeze_time = settings.startup["s6x-freeze-time"].value,
+    freezer_efficiency = settings.startup["s6x-freezer-efficiency"].value,
+    short_spoilage_time = 1440 * minute,
+    long_spoilage_time = 1440 * minute * 2,
+    spoilage_target = "s6x-freezer-burn"
+  }
+
+  --- @diagnostic enable: assign-type-mismatch
+end
 
 if (FrozenFoodLib.settings.spoilage == "extra") then
   FrozenFoodLib.settings.short_spoilage_time = FrozenFoodLib.settings.short_spoilage_time--[[@cast -?]] * 10
@@ -71,6 +77,8 @@ end
 --- @field public weight data.Weight The weight of the frozen item in kg.
 --- @field public default_import_location data.SpaceLocationID? The default import location of the frozen item. Defaults to Gleba.
 --- @field public spoilage_time ("short"|"long")? The spoilage time of the frozen item. Defaults to short if not specified or undefined value.
+--- @field public spoilage_result data.ItemID? The item to produce when the frozen item spoils. Defaults to "s6x-freezer-burn" if not specified.
+--- @field public spoilage_trigger_result data.SpoilToTriggerResult? The trigger result to produce when the frozen item spoils. Takes precedence over spoilage_result if specified.
 --- @field public tint data.RecipeTints The crafting machine tints the thaw recipes. The primary color is used for the tinting the frozen container too.
 --- @field public unlock "s6x-freeze-preservation"|"s6x-freeze-preservation-living"|data.TechnologyID? The technology to unlock the freeze/thaw recipes. Defaults to "s6x-freeze-preservation" if not specified.
 
@@ -84,7 +92,8 @@ function FrozenFoodLib.create_frozen_food(def)
     stack_size = def.stack_size,
     weight = def.weight * kg,
     spoil_ticks = (def.spoilage_time == "long" and FrozenFoodLib.settings.long_spoilage_time or FrozenFoodLib.settings.short_spoilage_time) --[[@as integer?]],
-    spoil_result = FrozenFoodLib.settings.spoilage_target,
+    spoil_result = def.spoilage_trigger_result and nil or def.spoilage_result or FrozenFoodLib.settings.spoilage_target,
+    spoil_to_trigger_result = def.spoilage_trigger_result,
 		default_import_location = def.default_import_location or "gleba",
 		inventory_move_sound = item_sounds.plastic_inventory_move,
 		pick_sound = item_sounds.plastic_inventory_pickup,
